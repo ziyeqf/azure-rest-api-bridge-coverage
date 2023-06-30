@@ -26,7 +26,6 @@ func (b *SchemaJSON) UnmarshalJSON(body []byte) error {
 	}
 	b.Type, _ = m["type"].(string)
 
-	// todo: do we really need this? or just take it as a map to use is fine.
 	if e, ok := m["elem"]; ok && e != nil {
 		elem := e.(map[string]interface{})
 		if schema, ok := elem["schema"]; ok {
