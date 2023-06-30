@@ -27,13 +27,7 @@ func (b *SchemaJSON) UnmarshalJSON(body []byte) error {
 	b.Type, _ = m["type"].(string)
 
 	if e, ok := m["elem"]; ok && e != nil {
-		elem := e.(map[string]interface{})
-		if schema, ok := elem["schema"]; ok {
-			b.Elem = ResourceFromMap(schema.(map[string]interface{}))
-		}
-		if t, ok := elem["type"]; ok {
-			b.Elem = t.(string)
-		}
+		b.Elem = decodeElem(e)
 	}
 
 	return nil
@@ -55,7 +49,23 @@ func SchemaFromMap(input map[string]interface{}) SchemaJSON {
 		result.Type = t.(string)
 	}
 
+	if t, ok := input["elem"]; ok {
+		result.Elem = decodeElem(t)
+	}
+
 	return result
+}
+
+func decodeElem(e interface{}) interface{} {
+	elem := e.(map[string]interface{})
+	if schema, ok := elem["schema"]; ok {
+		return ResourceFromMap(schema.(map[string]interface{}))
+	}
+	if t, ok := elem["type"]; ok {
+		return t.(string)
+	}
+
+	return nil
 }
 
 type ResourceJSON struct {
