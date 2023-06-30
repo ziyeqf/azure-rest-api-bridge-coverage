@@ -1,4 +1,4 @@
-module bridge-coverage
+module terraform-azurerm-provider-coverage
 
 go 1.20
 

@@ -27,3 +27,4 @@ A tool to statistics the coverage status of [`azure-rest-api-bridge`](https://gi
 - `schema`: the Schema JSON file.
 - `ignore-schema`: the schema path to ignore, separated by `,`.
 - `map-identity`: the key of elements in TypeMap, defaults to `0`.
+- `ignore-empty-resources`: Whether to ignore schema of uncovered and empty resources, defaults to `false`.

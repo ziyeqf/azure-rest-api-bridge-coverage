@@ -4,21 +4,23 @@ import (
 	"errors"
 	"strings"
 
-	"bridge-coverage/jsonhelper"
 	"github.com/go-openapi/jsonpointer"
+	"terraform-azurerm-provider-coverage/jsonhelper"
 )
 
 type Opts struct {
-	Resources     map[string]jsonhelper.ResourceJSON
-	BridgeMap     map[string]map[string]interface{}
-	IgnoreSchemas []string
-	MapIdentity   string
+	Resources                map[string]jsonhelper.ResourceJSON
+	CoverageMap              map[string]map[string]interface{}
+	IgnoreSchemas            []string
+	MapIdentity              string
+	IgnoreUncoveredResources bool
 }
 type Runner struct {
-	resources     map[string]jsonhelper.ResourceJSON
-	bridgeMap     map[string]map[string]interface{}
-	ignoreSchemas []string
-	mapIdentity   string
+	resources                map[string]jsonhelper.ResourceJSON
+	coverageMap              map[string]map[string]interface{}
+	ignoreSchemas            []string
+	mapIdentity              string
+	ignoreUncoveredResources bool
 	// map[resourceType]map[property]exist
 	coverageResult map[string]map[string]bool
 	scmCnt         map[string]int
@@ -29,26 +31,33 @@ func NwRunner(opt Opts) (*Runner, error) {
 	if opt.Resources == nil {
 		return nil, errors.New("resources is nil")
 	}
-	if opt.BridgeMap == nil {
-		return nil, errors.New("bridgeMap is nil")
+	if opt.CoverageMap == nil {
+		return nil, errors.New("coverageMap is nil")
 	}
 
 	return &Runner{
-		resources:      opt.Resources,
-		bridgeMap:      opt.BridgeMap,
-		ignoreSchemas:  opt.IgnoreSchemas,
-		mapIdentity:    opt.MapIdentity,
-		coverageResult: make(map[string]map[string]bool),
-		scmCnt:         make(map[string]int),
-		covCnt:         make(map[string]int),
+		resources:                opt.Resources,
+		coverageMap:              opt.CoverageMap,
+		ignoreSchemas:            opt.IgnoreSchemas,
+		mapIdentity:              opt.MapIdentity,
+		ignoreUncoveredResources: opt.IgnoreUncoveredResources,
+		coverageResult:           make(map[string]map[string]bool),
+		scmCnt:                   make(map[string]int),
+		covCnt:                   make(map[string]int),
 	}, nil
 }
 
 func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]int, coverageCnt map[string]int, err error) {
 	for resType, res := range r.resources {
 		resourceMissed := false
-		if _, ok := r.bridgeMap[resType]; !ok {
+		if coverage, ok := r.coverageMap[resType]; !ok {
 			resourceMissed = true
+		} else {
+			resourceMissed = len(coverage) == 0
+		}
+
+		if r.ignoreUncoveredResources && resourceMissed {
+			continue
 		}
 
 		if err := r.HandleSchema(res.Schema, resType, make([]string, 0), resourceMissed); err != nil {
@@ -83,7 +92,7 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 		}
 
 		r.scmCnt[resType]++
-		if _, ok := r.bridgeMap[resType][ptrStr]; ok {
+		if _, ok := r.coverageMap[resType][ptrStr]; ok {
 			r.coverageResult[resType][ptrStr] = true
 			r.covCnt[resType]++
 		} else {

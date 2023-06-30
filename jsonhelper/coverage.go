@@ -8,7 +8,7 @@ import (
 )
 
 // return map[reseourceType]map[appAddr]PropertyMap
-func ParseBridgeFile(path string) (map[string]map[string]interface{}, error) {
+func ParseCoverageFile(path string) (map[string]map[string]interface{}, error) {
 	f, err := os.OpenFile(path, os.O_RDONLY, 0666)
 	if err != nil {
 		return nil, fmt.Errorf("open file: %v", err)

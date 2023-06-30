@@ -8,19 +8,20 @@ import (
 	"os"
 	"strings"
 
-	"bridge-coverage/jsonhelper"
-	"bridge-coverage/runner"
+	"terraform-azurerm-provider-coverage/jsonhelper"
+	"terraform-azurerm-provider-coverage/runner"
 )
 
 func main() {
-	bridgeFile := flag.String("input", "", "the input file of schema")
+	coverageFile := flag.String("input", "", "the input file of schema")
 	schemaFile := flag.String("schema", "", "the schema dump of azurerm provider")
 	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
 	mapIdentity := flag.String("map-identity", "0", "identity(key) for Element in TypeMap")
+	ignoreUncoveredResources := flag.Bool("ignore-uncovered-resources", false, "ignore uncovered resources")
 
 	flag.Parse()
 
-	bridgeMap, err := jsonhelper.ParseBridgeFile(*bridgeFile)
+	coverageMap, err := jsonhelper.ParseCoverageFile(*coverageFile)
 	if err != nil {
 		exitOnError(err)
 	}
@@ -41,10 +42,11 @@ func main() {
 	}
 
 	r, err := runner.NwRunner(runner.Opts{
-		Resources:     schema.ProviderSchema.ResourcesMap,
-		BridgeMap:     bridgeMap,
-		IgnoreSchemas: ignoreSchemaList,
-		MapIdentity:   *mapIdentity,
+		Resources:                schema.ProviderSchema.ResourcesMap,
+		CoverageMap:              coverageMap,
+		IgnoreSchemas:            ignoreSchemaList,
+		MapIdentity:              *mapIdentity,
+		IgnoreUncoveredResources: *ignoreUncoveredResources,
 	})
 	if err != nil {
 		exitOnError(err)
@@ -67,14 +69,20 @@ func main() {
 	totalCov := 0
 	// schema is the superset of coverage
 
+	resultCnt := scmCnt
+	if *ignoreUncoveredResources {
+		resultCnt = covCnt
+	}
+
 	issueRes := make([]string, 0)
 	fmt.Println("resource coverage detail:")
-	for k, c := range scmCnt {
-		totalScm += c
+	for k, _ := range resultCnt {
+		// read number from maps because the loop may run on different map
+		totalScm += scmCnt[k]
 		totalCov += covCnt[k]
-		percent := float64(covCnt[k]) / float64(c) * 100
-		if covCnt[k] < len(bridgeMap[k]) {
-			issueRes = append(issueRes, fmt.Sprintf("%s: statics count: %d, coverage count: %d", k, covCnt[k], len(bridgeMap[k])))
+		percent := float64(covCnt[k]) / float64(scmCnt[k]) * 100
+		if covCnt[k] < len(coverageMap[k]) {
+			issueRes = append(issueRes, fmt.Sprintf("%s: statics count: %d, coverage count: %d", k, covCnt[k], len(coverageMap[k])))
 		}
 		fmt.Println(fmt.Sprintf("resource: %s, schema cnt: %d, coverage cnt: %d, percent: %.2f%%", k, scmCnt[k], covCnt[k], percent))
 	}
