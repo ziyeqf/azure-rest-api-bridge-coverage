@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"bridge-coverage/jsonhelper"
 	"bridge-coverage/runner"
@@ -14,6 +15,8 @@ import (
 func main() {
 	bridgeFile := flag.String("input", "", "the input file of schema")
 	schemaFile := flag.String("schema", "", "the schema dump of azurerm provider")
+	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
+
 	flag.Parse()
 
 	bridgeMap, err := jsonhelper.ParseBridgeFile(*bridgeFile)
@@ -26,7 +29,18 @@ func main() {
 		exitOnError(err)
 	}
 
-	detail, scmCnt, covCnt, err := runner.NwRunner(schema.ProviderSchema.ResourcesMap, bridgeMap).Run()
+	ignoreSchemaList := make([]string, 0)
+	if ignoreSchemas != nil && *ignoreSchemas != "" {
+		ignoreSchemaList = append(ignoreSchemaList, strings.Split(*ignoreSchemas, ",")...)
+	}
+
+	r := runner.NwRunner(
+		schema.ProviderSchema.ResourcesMap,
+		bridgeMap,
+		ignoreSchemaList,
+	)
+
+	detail, scmCnt, covCnt, err := r.Run()
 	if err != nil {
 		exitOnError(err)
 	}

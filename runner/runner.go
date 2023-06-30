@@ -14,15 +14,17 @@ type Runner struct {
 	coverageResult map[string]map[string]bool
 	scmCnt         map[string]int
 	covCnt         map[string]int
+	ignoreSchemas  []string
 }
 
-func NwRunner(resources map[string]jsonhelper.ResourceJSON, bridgeMap map[string]map[string]interface{}) *Runner {
+func NwRunner(resources map[string]jsonhelper.ResourceJSON, bridgeMap map[string]map[string]interface{}, ignoreSchemas []string) *Runner {
 	return &Runner{
 		resources:      resources,
 		bridgeMap:      bridgeMap,
 		coverageResult: make(map[string]map[string]bool),
 		scmCnt:         make(map[string]int),
 		covCnt:         make(map[string]int),
+		ignoreSchemas:  ignoreSchemas,
 	}
 }
 
@@ -42,14 +44,26 @@ func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]
 }
 
 func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType string, etkPrefix []string, resourceMissed bool) error {
-	updateMap := func(ptrStr string) {
+	updateMapFunc := func(ptrStr string) error {
+		if len(r.ignoreSchemas) > 0 {
+			for _, ignoreSchema := range r.ignoreSchemas {
+				ignorePtr, err := jsonpointer.New("/" + ignoreSchema)
+				if err != nil {
+					return err
+				}
+				if ptrStr == ignorePtr.String() {
+					return nil
+				}
+			}
+		}
+
 		if _, ok := r.coverageResult[resType]; !ok {
 			r.coverageResult[resType] = make(map[string]bool)
 		}
 
 		if resourceMissed {
 			r.coverageResult[resType][ptrStr] = false
-			return
+			return nil
 		}
 
 		r.scmCnt[resType]++
@@ -59,6 +73,8 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 		} else {
 			r.coverageResult[resType][ptrStr] = false
 		}
+
+		return nil
 	}
 
 	for n, sch := range schema {
@@ -73,7 +89,9 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 				if err != nil {
 					return err
 				}
-				updateMap(jsonP.String())
+				if err := updateMapFunc(jsonP.String()); err != nil {
+					return err
+				}
 			case jsonhelper.ResourceJSON:
 				if err := r.HandleSchema(t.Schema, resType, append(etkPrefix, n, "0"), resourceMissed); err != nil {
 					return err
@@ -84,7 +102,9 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 			if err != nil {
 				return err
 			}
-			updateMap(jsonP.String())
+			if err := updateMapFunc(jsonP.String()); err != nil {
+				return err
+			}
 		}
 	}
 
