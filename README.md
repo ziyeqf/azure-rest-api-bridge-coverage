@@ -26,5 +26,5 @@ A tool to statistics the coverage status of [`azure-rest-api-bridge`](https://gi
 - `input`: the Coverage JSON file, in the format of `Input Sample`.
 - `schema`: the Schema JSON file.
 - `ignore-schema`: the schema path to ignore, separated by `,`.
-- `map-identity`: the key of elements in TypeMap, defaults to `0`.
+- `map-prefix-match`: Whether to use prefix match elements in a map, defaults to `true`. 
 - `ignore-empty-resources`: Whether to ignore schema of uncovered and empty resources, defaults to `false`.
