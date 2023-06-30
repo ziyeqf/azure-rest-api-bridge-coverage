@@ -60,20 +60,21 @@ func main() {
 		exitOnError(err)
 	}
 
+	fmt.Println(string(b))
+
 	totalScm := 0
+	totalCov := 0
+	// schema is the superset of coverage
 	for k, c := range scmCnt {
 		totalScm += c
-		fmt.Println(fmt.Sprintf("resource: %s, schema cnt: %d, coverage cnt: %d", k, scmCnt[k], covCnt[k]))
+		totalCov += covCnt[k]
+		percent := float64(covCnt[k]) / float64(c) * 100
+		fmt.Println(fmt.Sprintf("resource: %s, schema cnt: %d, coverage cnt: %d, percent: %.2f%%", k, scmCnt[k], covCnt[k], percent))
 	}
 
-	totalCov := 0
-	for _, c := range covCnt {
-		totalCov += c
-	}
-
-	fmt.Println(string(b))
 	fmt.Println("total schema count: ", totalScm)
 	fmt.Println("total coverage count: ", totalCov)
+	fmt.Println(fmt.Sprintf("total coverage percent: %.2f%%", float64(totalCov)/float64(totalScm)*100))
 }
 
 func exitOnError(err error) {
