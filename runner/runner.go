@@ -1,31 +1,47 @@
 package runner
 
 import (
+	"errors"
 	"strings"
 
 	"bridge-coverage/jsonhelper"
 	"github.com/go-openapi/jsonpointer"
 )
 
+type Opts struct {
+	Resources     map[string]jsonhelper.ResourceJSON
+	BridgeMap     map[string]map[string]interface{}
+	IgnoreSchemas []string
+	MapIdentity   string
+}
 type Runner struct {
-	resources map[string]jsonhelper.ResourceJSON
-	bridgeMap map[string]map[string]interface{}
+	resources     map[string]jsonhelper.ResourceJSON
+	bridgeMap     map[string]map[string]interface{}
+	ignoreSchemas []string
+	mapIdentity   string
 	// map[resourceType]map[property]exist
 	coverageResult map[string]map[string]bool
 	scmCnt         map[string]int
 	covCnt         map[string]int
-	ignoreSchemas  []string
 }
 
-func NwRunner(resources map[string]jsonhelper.ResourceJSON, bridgeMap map[string]map[string]interface{}, ignoreSchemas []string) *Runner {
+func NwRunner(opt Opts) (*Runner, error) {
+	if opt.Resources == nil {
+		return nil, errors.New("resources is nil")
+	}
+	if opt.BridgeMap == nil {
+		return nil, errors.New("bridgeMap is nil")
+	}
+
 	return &Runner{
-		resources:      resources,
-		bridgeMap:      bridgeMap,
+		resources:      opt.Resources,
+		bridgeMap:      opt.BridgeMap,
+		ignoreSchemas:  opt.IgnoreSchemas,
+		mapIdentity:    opt.MapIdentity,
 		coverageResult: make(map[string]map[string]bool),
 		scmCnt:         make(map[string]int),
 		covCnt:         make(map[string]int),
-		ignoreSchemas:  ignoreSchemas,
-	}
+	}, nil
 }
 
 func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]int, coverageCnt map[string]int, err error) {
@@ -77,25 +93,34 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 		return nil
 	}
 
+	handleNestedFunc := func(elem interface{}, name string, childIdentity string) error {
+		switch t := elem.(type) {
+		case string:
+			jsonP, err := jsonpointer.New("/" + strings.Join(append(etkPrefix, name), "/") + "/" + childIdentity)
+			if err != nil {
+				return err
+			}
+			if err := updateMapFunc(jsonP.String()); err != nil {
+				return err
+			}
+		case jsonhelper.ResourceJSON:
+			if err := r.HandleSchema(t.Schema, resType, append(etkPrefix, name, "0"), resourceMissed); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+
 	for n, sch := range schema {
 		switch sch.Type {
 		case jsonhelper.SchemaTypeList,
-			jsonhelper.SchemaTypeSet,
-			jsonhelper.SchemaTypeMap:
-			// for nested properties
-			switch t := sch.Elem.(type) {
-			case string:
-				jsonP, err := jsonpointer.New("/" + strings.Join(append(etkPrefix, n), "/") + "/0")
-				if err != nil {
-					return err
-				}
-				if err := updateMapFunc(jsonP.String()); err != nil {
-					return err
-				}
-			case jsonhelper.ResourceJSON:
-				if err := r.HandleSchema(t.Schema, resType, append(etkPrefix, n, "0"), resourceMissed); err != nil {
-					return err
-				}
+			jsonhelper.SchemaTypeSet:
+			if err := handleNestedFunc(sch.Elem, n, "0"); err != nil {
+				return err
+			}
+		case jsonhelper.SchemaTypeMap:
+			if err := handleNestedFunc(sch.Elem, n, r.mapIdentity); err != nil {
+				return err
 			}
 		default:
 			jsonP, err := jsonpointer.New("/" + strings.Join(append(etkPrefix, n), "/"))

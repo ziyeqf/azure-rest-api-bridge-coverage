@@ -1,0 +1,22 @@
+{
+  "azurerm_mobile_network_packet_core_control_plane": {
+    "/control_plane_access_ipv4_address": {},
+    "/control_plane_access_ipv4_gateway": {},
+    "/control_plane_access_ipv4_subnet": {},
+    "/control_plane_access_name": {},
+    "/core_network_technology": {},
+    "/local_diagnostics_access/0/authentication_type": {},
+    "/local_diagnostics_access/0/https_server_certificate_url": {},
+    "/location": {},
+    "/platform/0/arc_kubernetes_cluster_id": {},
+    "/platform/0/custom_location_id": {},
+    "/platform/0/edge_device_id": {},
+    "/platform/0/stack_hci_cluster_id": {},
+    "/platform/0/type": {},
+    "/site_ids/0": {},
+    "/sku": {},
+    "/software_version": {},
+    "/tags/KEY": {},
+    "/user_equipment_mtu_in_bytes": {}
+  }
+}

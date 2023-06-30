@@ -16,6 +16,7 @@ func main() {
 	bridgeFile := flag.String("input", "", "the input file of schema")
 	schemaFile := flag.String("schema", "", "the schema dump of azurerm provider")
 	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
+	mapIdentity := flag.String("map-identity", "0", "identity(key) for Element in TypeMap")
 
 	flag.Parse()
 
@@ -34,11 +35,20 @@ func main() {
 		ignoreSchemaList = append(ignoreSchemaList, strings.Split(*ignoreSchemas, ",")...)
 	}
 
-	r := runner.NwRunner(
-		schema.ProviderSchema.ResourcesMap,
-		bridgeMap,
-		ignoreSchemaList,
-	)
+	defaultMapIdentity := "0"
+	if mapIdentity == nil || *mapIdentity == "" {
+		mapIdentity = &defaultMapIdentity
+	}
+
+	r, err := runner.NwRunner(runner.Opts{
+		Resources:     schema.ProviderSchema.ResourcesMap,
+		BridgeMap:     bridgeMap,
+		IgnoreSchemas: ignoreSchemaList,
+		MapIdentity:   *mapIdentity,
+	})
+	if err != nil {
+		exitOnError(err)
+	}
 
 	detail, scmCnt, covCnt, err := r.Run()
 	if err != nil {
