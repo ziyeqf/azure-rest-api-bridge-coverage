@@ -16,7 +16,6 @@ func main() {
 	coverageFile := flag.String("input", "", "the input file of schema")
 	schemaFile := flag.String("schema", "", "the schema dump of azurerm provider")
 	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
-	prefixMatchForMap := flag.Bool("map-prefix-match", true, "enable prefix match for element in map")
 	ignoreUncoveredResources := flag.Bool("ignore-uncovered-resources", false, "ignore uncovered resources")
 
 	flag.Parse()
@@ -40,7 +39,6 @@ func main() {
 		Resources:                schema.ProviderSchema.ResourcesMap,
 		CoverageMap:              coverageMap,
 		IgnoreSchemas:            ignoreSchemaList,
-		PrefixMatch:              *prefixMatchForMap,
 		IgnoreUncoveredResources: *ignoreUncoveredResources,
 	})
 	if err != nil {
@@ -95,8 +93,9 @@ func main() {
 		}
 	}
 	fmt.Println("----------------------------------------")
-	fmt.Println(fmt.Sprintf("total resources: %d", len(resultCnt)))
+	fmt.Println(fmt.Sprintf("total resources: %d", len(scmCnt)))
 	fmt.Println(fmt.Sprintf("total count schema: %d, coverage: %d, percent: %.2f%%", totalScm, totalCov, float64(totalCov)/float64(totalScm)*100))
+	fmt.Println("----------------------------------------")
 }
 
 func exitOnError(err error) {

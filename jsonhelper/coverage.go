@@ -21,10 +21,10 @@ func ParseCoverageFile(path string) (map[string]map[string]interface{}, error) {
 		return nil, fmt.Errorf("read file: %v", err)
 	}
 
-	var bridgeMap map[string]map[string]interface{}
-	if err := json.Unmarshal(jsonByte, &bridgeMap); err != nil {
+	var coverageMap map[string]map[string]interface{}
+	if err := json.Unmarshal(jsonByte, &coverageMap); err != nil {
 		return nil, fmt.Errorf("unmarshal json: %v", err)
 	}
 
-	return bridgeMap, nil
+	return coverageMap, nil
 }

@@ -2,25 +2,27 @@ package runner
 
 import (
 	"errors"
-	"strings"
+	"fmt"
+	"sort"
 
 	"github.com/go-openapi/jsonpointer"
 	"terraform-azurerm-provider-coverage/jsonhelper"
+	"terraform-azurerm-provider-coverage/jsontree"
 )
 
 type Opts struct {
 	Resources                map[string]jsonhelper.ResourceJSON
 	CoverageMap              map[string]map[string]interface{}
 	IgnoreSchemas            []string
-	PrefixMatch              bool
 	IgnoreUncoveredResources bool
 }
+
 type Runner struct {
 	resources                map[string]jsonhelper.ResourceJSON
 	coverageMap              map[string]map[string]interface{}
 	ignoreSchemas            []string
-	prefixMatch              bool
 	ignoreUncoveredResources bool
+	parsedCoverageTree       map[string]*jsontree.Node
 	// map[resourceType]map[property]exist
 	coverageResult map[string]map[string]bool
 	scmCnt         map[string]int
@@ -35,15 +37,31 @@ func NwRunner(opt Opts) (*Runner, error) {
 		return nil, errors.New("coverageMap is nil")
 	}
 
+	parsedCoverageTree := make(map[string]*jsontree.Node)
+	for n, res := range opt.CoverageMap {
+		rootNode := jsontree.NewNode("/")
+		parsedCoverageTree[n] = &rootNode
+		for prop, _ := range res {
+			ptr, err := jsonpointer.New(prop)
+			if err != nil {
+				return nil, err
+			}
+			rootNode, err = jsontree.ParseJsonPtr(&rootNode, ptr)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	return &Runner{
 		resources:                opt.Resources,
 		coverageMap:              opt.CoverageMap,
 		ignoreSchemas:            opt.IgnoreSchemas,
-		prefixMatch:              opt.PrefixMatch,
 		ignoreUncoveredResources: opt.IgnoreUncoveredResources,
 		coverageResult:           make(map[string]map[string]bool),
 		scmCnt:                   make(map[string]int),
 		covCnt:                   make(map[string]int),
+		parsedCoverageTree:       parsedCoverageTree,
 	}, nil
 }
 
@@ -60,7 +78,14 @@ func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]
 			continue
 		}
 
-		if err := r.HandleSchema(res.Schema, resType, make([]string, 0), resourceMissed); err != nil {
+		resCtx := ResourceContext{
+			Name:               resType,
+			Schema:             res.Schema,
+			TokenPrefix:        make([]string, 0),
+			DisplayTokenPrefix: make([]string, 0),
+		}
+
+		if err := r.HandleSchema(resCtx); err != nil {
 			return nil, nil, nil, err
 		}
 
@@ -68,21 +93,79 @@ func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]
 	return r.coverageResult, r.scmCnt, r.covCnt, nil
 }
 
-func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType string, etkPrefix []string, resourceMissed bool) error {
-	// prefixMatch is special for map, as TypeString in map might has key name in coverage
-	// e.g.:
-	// coverage: "/example/key" "/example/abc" etc
-	// schema:
-	// "example":{
-	//    "type": "TypeMap",
-	//    "optional": true,
-	//    "forceNew": true,
-	//    "elem": {
-	//        "type": "TypeString"
-	//    }
-	//}
-	// then we will need to use the prefix "/example" to match
-	updateMapFunc := func(ptrStr string, prefixMatch bool) error {
+func (r Runner) HandleNestedSchema(resCtx ResourceContext) func(elem interface{}, name string) error {
+	return func(elem interface{}, name string) error {
+		ptr, err := resCtx.JsonPtr(name)
+		if err != nil {
+			return err
+		}
+
+		possibleNames, _ := r.GetAllChildrenNames(resCtx.Name, ptr)
+		switch t := elem.(type) {
+		case string:
+			if len(possibleNames) == 0 {
+				possibleNames = append(possibleNames, "/0")
+				possibleNames = append(possibleNames, "")
+			}
+			for _, n := range possibleNames {
+				ptr, err := resCtx.JsonPtr(name + "/" + n)
+				if err != nil {
+					return err
+				}
+				displayPtr, err := resCtx.DisplayJsonPtr(name)
+				if err != nil {
+					return err
+				}
+				if err := resCtx.UpdateMapFunc(ptr, displayPtr); err != nil {
+					return err
+				}
+			}
+		case jsonhelper.ResourceJSON:
+			if len(possibleNames) == 0 {
+				possibleNames = append(possibleNames, "0")
+			}
+			for _, n := range possibleNames {
+				if err := r.HandleSchema(resCtx.update(t.Schema, []string{name, n}, []string{name, possibleNames[0]})); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+}
+
+func (r Runner) HandleSchema(resCtx ResourceContext) error {
+	resCtx.UpdateMapFunc = r.UpdateCoverageResult(resCtx.Name)
+	handleNestedFunc := r.HandleNestedSchema(resCtx)
+
+	for n, sch := range resCtx.Schema {
+		switch sch.Type {
+		case jsonhelper.SchemaTypeList,
+			jsonhelper.SchemaTypeSet,
+			jsonhelper.SchemaTypeMap:
+			if err := handleNestedFunc(sch.Elem, n); err != nil {
+				return err
+			}
+		default:
+			ptr, err := resCtx.JsonPtr(n)
+			if err != nil {
+				return err
+			}
+			displayPtr, err := resCtx.DisplayJsonPtr(n)
+			if err != nil {
+				return err
+			}
+			if err := resCtx.UpdateMapFunc(ptr, displayPtr); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func (r Runner) UpdateCoverageResult(resType string) func(ptrStr string, realPtrStr string) error {
+	return func(ptrStr string, displayPtrStr string) error {
 		if len(r.ignoreSchemas) > 0 {
 			for _, ignoreSchema := range r.ignoreSchemas {
 				ignorePtr, err := jsonpointer.New("/" + ignoreSchema)
@@ -92,6 +175,9 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 				if ptrStr == ignorePtr.String() {
 					return nil
 				}
+				if displayPtrStr == ignorePtr.String() {
+					return nil
+				}
 			}
 		}
 
@@ -99,77 +185,54 @@ func (r Runner) HandleSchema(schema map[string]jsonhelper.SchemaJSON, resType st
 			r.coverageResult[resType] = make(map[string]bool)
 		}
 
-		r.scmCnt[resType]++
+		_, ok := r.coverageMap[resType][ptrStr]
+		r.UpdatePropExist(resType, displayPtrStr, ok)
 
-		if resourceMissed {
-			r.coverageResult[resType][ptrStr] = false
-			return nil
-		}
-
-		if prefixMatch {
-			r.coverageResult[resType][ptrStr] = false
-			for k, _ := range r.coverageMap[resType] {
-				if strings.HasPrefix(k, ptrStr) {
-					r.coverageResult[resType][ptrStr] = true
-					r.covCnt[resType]++
-					break
-				}
-			}
-			return nil
-		}
-
-		if _, ok := r.coverageMap[resType][ptrStr]; ok {
-			r.coverageResult[resType][ptrStr] = true
-			r.covCnt[resType]++
-		} else {
-			r.coverageResult[resType][ptrStr] = false
-		}
 		return nil
 	}
 
-	handleNestedFunc := func(elem interface{}, name string, prefixMatch bool) error {
-		ptr := "/" + strings.Join(append(etkPrefix, name), "/")
-		if !prefixMatch {
-			ptr += "/0"
-		}
-		switch t := elem.(type) {
-		case string:
-			jsonP, err := jsonpointer.New(ptr)
-			if err != nil {
-				return err
-			}
-			if err := updateMapFunc(jsonP.String(), prefixMatch); err != nil {
-				return err
-			}
-		case jsonhelper.ResourceJSON:
-			if err := r.HandleSchema(t.Schema, resType, append(etkPrefix, name, "0"), resourceMissed); err != nil {
-				return err
-			}
-		}
-		return nil
+}
+
+// never use `false` to override `true` on the result map.
+func (r Runner) UpdatePropExist(resType string, propPtr string, exist bool) {
+	if e, ok := r.coverageResult[resType][propPtr]; ok && e {
+		return
 	}
 
-	for n, sch := range schema {
-		switch sch.Type {
-		case jsonhelper.SchemaTypeList,
-			jsonhelper.SchemaTypeSet:
-			if err := handleNestedFunc(sch.Elem, n, false); err != nil {
-				return err
-			}
-		case jsonhelper.SchemaTypeMap:
-			if err := handleNestedFunc(sch.Elem, n, true); err != nil {
-				return err
-			}
-		default:
-			jsonP, err := jsonpointer.New("/" + strings.Join(append(etkPrefix, n), "/"))
-			if err != nil {
-				return err
-			}
-			if err := updateMapFunc(jsonP.String(), false); err != nil {
-				return err
-			}
-		}
+	r.coverageResult[resType][propPtr] = exist
+	if exist {
+		r.covCnt[resType]++
+	}
+	r.scmCnt[resType]++
+}
+
+func (r Runner) GetAllChildrenNames(resType, ptrStr string) ([]string, error) {
+	root, ok := r.parsedCoverageTree[resType]
+	if !ok {
+		return nil, fmt.Errorf("resource type %v not found on coverage tree", resType)
 	}
 
-	return nil
+	ptr, err := jsonpointer.New(ptrStr)
+	if err != nil {
+		return nil, err
+	}
+
+	cur := root
+	for _, tk := range ptr.DecodedTokens() {
+		if _, ok := cur.Children[tk]; !ok {
+			return nil, fmt.Errorf("no node match %v", tk)
+		}
+
+		n, _ := cur.Children[tk]
+		cur = &n
+	}
+
+	result := make([]string, 0)
+	for k, _ := range cur.Children {
+		result = append(result, k)
+	}
+
+	// do sort to keep result always same
+	sort.Strings(result)
+	return result, nil
 }
