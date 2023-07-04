@@ -50,11 +50,24 @@ func main() {
 		exitOnError(err)
 	}
 
-	b, err := json.MarshalIndent(detail, "", "  ")
+	output := make(map[string]map[string][]string)
+	for k, v := range detail {
+		output[k] = make(map[string][]string)
+		output[k]["covered_properties"] = make([]string, 0)
+		output[k]["uncovered_properties"] = make([]string, 0)
+		for name, exist := range v {
+			if exist {
+				output[k]["covered_properties"] = append(output[k]["covered_properties"], name)
+			} else {
+				output[k]["uncovered_properties"] = append(output[k]["uncovered_properties"], name)
+			}
+		}
+	}
+
+	b, err := json.MarshalIndent(output, "", "  ")
 	if err != nil {
 		exitOnError(err)
 	}
-
 	fmt.Println(string(b))
 	fmt.Println("----------------------------------------")
 
