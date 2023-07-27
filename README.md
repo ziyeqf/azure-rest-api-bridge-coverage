@@ -27,3 +27,5 @@ A tool to statistics the coverage status of [`terraform-provider-azurerm`](https
 - `schema`: the Schema JSON file.
 - `ignore-schema`: the schema path to ignore, separated by `,`.
 - `ignore-empty-resources`: Whether to ignore schema of uncovered and empty resources, defaults to `false`.
+- `diagnostics-output`: Whether to output diagnostics information, defaults to `false`.
+- `expert-output`: Whether to output expert information, defaults to `false`.

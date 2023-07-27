@@ -1,28 +1,374 @@
-{
-  "azurerm_policy_set_definition": {
-    "/description": {
-    },
-    "/display_name": {
-    },
-    "/name": {
-    },
-    "/policy_definition_group/0/additional_metadata_resource_id": {
-    },
-    "/policy_definition_group/0/category": {
-    },
-    "/policy_definition_group/0/description": {
-    },
-    "/policy_definition_group/0/display_name": {
-    },
-    "/policy_definition_group/0/name": {
-    },
-    "/policy_definition_reference/0/policy_definition_id": {
-    },
-    "/policy_definition_reference/0/policy_group_names/0": {
-    },
-    "/policy_definition_reference/0/reference_id": {
-    },
-    "/policy_type": {
-    }
+{"azurerm_iothub": {
+  "/cloud_to_device/0/default_ttl": {
+    "addr": "properties.cloudToDevice.defaultTtlAsIso8601",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2612",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2612:32",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/CloudToDeviceProperties/properties/defaultTtlAsIso8601"
+  },
+  "/cloud_to_device/0/feedback/0/lock_duration": {
+    "addr": "properties.cloudToDevice.feedback.lockDurationAsIso8601",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2878",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2878:34",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FeedbackProperties/properties/lockDurationAsIso8601"
+  },
+  "/cloud_to_device/0/feedback/0/max_delivery_count": {
+    "addr": "properties.cloudToDevice.feedback.maxDeliveryCount",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2888",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2888:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FeedbackProperties/properties/maxDeliveryCount"
+  },
+  "/cloud_to_device/0/feedback/0/time_to_live": {
+    "addr": "properties.cloudToDevice.feedback.ttlAsIso8601",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2883",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2883:25",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FeedbackProperties/properties/ttlAsIso8601"
+  },
+  "/cloud_to_device/0/max_delivery_count": {
+    "addr": "properties.cloudToDevice.maxDeliveryCount",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2605",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2605:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/CloudToDeviceProperties/properties/maxDeliveryCount"
+  },
+  "/endpoint/0/authentication_type": {
+    "addr": "properties.routing.endpoints.storageContainers.*.authenticationType",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3147",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3147:31",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/authenticationType"
+  },
+  "/endpoint/0/batch_frequency_in_seconds": {
+    "addr": "properties.routing.endpoints.storageContainers.*.batchFrequencyInSeconds",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3184",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3184:36",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/batchFrequencyInSeconds"
+  },
+  "/endpoint/0/connection_string": {
+    "addr": "properties.routing.endpoints.storageContainers.*.connectionString",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3138",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3138:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/connectionString"
+  },
+  "/endpoint/0/container_name": {
+    "addr": "properties.routing.endpoints.storageContainers.*.containerName",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3176",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3176:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/containerName"
+  },
+  "/endpoint/0/encoding": {
+    "addr": "properties.routing.endpoints.storageContainers.*.encoding",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3198",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3198:21",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/encoding"
+  },
+  "/endpoint/0/endpoint_uri": {
+    "addr": "properties.routing.endpoints.storageContainers.*.endpointUri",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3143",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3143:24",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/endpointUri"
+  },
+  "/endpoint/0/file_name_format": {
+    "addr": "properties.routing.endpoints.storageContainers.*.fileNameFormat",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3180",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3180:27",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/fileNameFormat"
+  },
+  "/endpoint/0/identity_id": {
+    "addr": "properties.routing.endpoints.storageContainers.*.identity.userAssignedIdentity",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L4519",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:4519:33",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/ManagedIdentity/properties/userAssignedIdentity"
+  },
+  "/endpoint/0/max_chunk_size_in_bytes": {
+    "addr": "properties.routing.endpoints.storageContainers.*.maxChunkSizeInBytes",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3191",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3191:32",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/maxChunkSizeInBytes"
+  },
+  "/endpoint/0/name": {
+    "addr": "properties.routing.endpoints.storageContainers.*.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3163",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3163:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/name"
+  },
+  "/endpoint/0/resource_group_name": {
+    "addr": "properties.routing.endpoints.storageContainers.*.resourceGroup",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3172",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3172:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingStorageContainerProperties/properties/resourceGroup"
+  },
+  "/endpoint/1/authentication_type": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.authenticationType",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2986",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2986:31",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/authenticationType"
+  },
+  "/endpoint/1/connection_string": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.connectionString",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2973",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2973:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/connectionString"
+  },
+  "/endpoint/1/endpoint_uri": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.endpointUri",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2978",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2978:24",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/endpointUri"
+  },
+  "/endpoint/1/entity_path": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.entityPath",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2982",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2982:23",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/entityPath"
+  },
+  "/endpoint/1/identity_id": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.identity.userAssignedIdentity",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L4519",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:4519:33",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/ManagedIdentity/properties/userAssignedIdentity"
+  },
+  "/endpoint/1/name": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3002",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3002:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/name"
+  },
+  "/endpoint/1/resource_group_name": {
+    "addr": "properties.routing.endpoints.serviceBusQueues.*.resourceGroup",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3011",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3011:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusQueueEndpointProperties/properties/resourceGroup"
+  },
+  "/endpoint/2/authentication_type": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.authenticationType",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3041",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3041:31",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/authenticationType"
+  },
+  "/endpoint/2/connection_string": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.connectionString",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3028",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3028:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/connectionString"
+  },
+  "/endpoint/2/endpoint_uri": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.endpointUri",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3033",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3033:24",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/endpointUri"
+  },
+  "/endpoint/2/entity_path": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.entityPath",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3037",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3037:23",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/entityPath"
+  },
+  "/endpoint/2/identity_id": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.identity.userAssignedIdentity",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L4519",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:4519:33",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/ManagedIdentity/properties/userAssignedIdentity"
+  },
+  "/endpoint/2/name": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3057",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3057:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/name"
+  },
+  "/endpoint/2/resource_group_name": {
+    "addr": "properties.routing.endpoints.serviceBusTopics.*.resourceGroup",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3066",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3066:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingServiceBusTopicEndpointProperties/properties/resourceGroup"
+  },
+  "/endpoint/3/authentication_type": {
+    "addr": "properties.routing.endpoints.eventHubs.*.authenticationType",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3096",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3096:31",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/authenticationType"
+  },
+  "/endpoint/3/connection_string": {
+    "addr": "properties.routing.endpoints.eventHubs.*.connectionString",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3083",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3083:29",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/connectionString"
+  },
+  "/endpoint/3/endpoint_uri": {
+    "addr": "properties.routing.endpoints.eventHubs.*.endpointUri",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3088",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3088:24",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/endpointUri"
+  },
+  "/endpoint/3/entity_path": {
+    "addr": "properties.routing.endpoints.eventHubs.*.entityPath",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3092",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3092:23",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/entityPath"
+  },
+  "/endpoint/3/identity_id": {
+    "addr": "properties.routing.endpoints.eventHubs.*.identity.userAssignedIdentity",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L4519",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:4519:33",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/ManagedIdentity/properties/userAssignedIdentity"
+  },
+  "/endpoint/3/name": {
+    "addr": "properties.routing.endpoints.eventHubs.*.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3112",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3112:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/name"
+  },
+  "/endpoint/3/resource_group_name": {
+    "addr": "properties.routing.endpoints.eventHubs.*.resourceGroup",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3121",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3121:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RoutingEventHubProperties/properties/resourceGroup"
+  },
+  "/enrichment/0/endpoint_names/0": {
+    "addr": "properties.routing.enrichments.*.endpointNames.*",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3399",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3399:20",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/EnrichmentProperties/properties/endpointNames/items"
+  },
+  "/enrichment/0/key": {
+    "addr": "properties.routing.enrichments.*.key",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3387",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3387:16",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/EnrichmentProperties/properties/key"
+  },
+  "/enrichment/0/value": {
+    "addr": "properties.routing.enrichments.*.value",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3391",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3391:18",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/EnrichmentProperties/properties/value"
+  },
+  "/fallback_route/0/condition": {
+    "addr": "properties.routing.fallbackRoute.condition",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3359",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3359:22",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FallbackRouteProperties/properties/condition"
+  },
+  "/fallback_route/0/endpoint_names/0": {
+    "addr": "properties.routing.fallbackRoute.endpointNames.*",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3368",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3368:20",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FallbackRouteProperties/properties/endpointNames/items"
+  },
+  "/fallback_route/0/source": {
+    "addr": "properties.routing.fallbackRoute.source",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3348",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3348:19",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/FallbackRouteProperties/properties/source"
+  },
+  "/hostname": {
+    "addr": "properties.hostName",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2374",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2374:21",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/IotHubProperties/properties/hostName"
+  },
+  "/location": {
+    "addr": "location",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3464",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3464:21",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/Resource/properties/location"
+  },
+  "/min_tls_version": {
+    "addr": "properties.minTlsVersion",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2353",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2353:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/IotHubProperties/properties/minTlsVersion"
+  },
+  "/network_rule_set/0/default_action": {
+    "addr": "properties.networkRuleSets.defaultAction",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2657",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2657:26",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/NetworkRuleSetProperties/properties/defaultAction"
+  },
+  "/network_rule_set/0/ip_rule/0/action": {
+    "addr": "properties.networkRuleSets.ipRules.*.action",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2695",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2695:19",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/NetworkRuleSetIpRule/properties/action"
+  },
+  "/network_rule_set/0/ip_rule/0/ip_mask": {
+    "addr": "properties.networkRuleSets.ipRules.*.ipMask",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2707",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2707:19",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/NetworkRuleSetIpRule/properties/ipMask"
+  },
+  "/network_rule_set/0/ip_rule/0/name": {
+    "addr": "properties.networkRuleSets.ipRules.*.filterName",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2691",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2691:23",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/NetworkRuleSetIpRule/properties/filterName"
+  },
+  "/route/0/condition": {
+    "addr": "properties.routing.routes.*.condition",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3315",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3315:22",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RouteProperties/properties/condition"
+  },
+  "/route/0/endpoint_names/0": {
+    "addr": "properties.routing.routes.*.endpointNames.*",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3324",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3324:20",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RouteProperties/properties/endpointNames/items"
+  },
+  "/route/0/name": {
+    "addr": "properties.routing.routes.*.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3292",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3292:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RouteProperties/properties/name"
+  },
+  "/route/0/source": {
+    "addr": "properties.routing.routes.*.source",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3297",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3297:19",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/RouteProperties/properties/source"
+  },
+  "/shared_access_policy/0/key_name": {
+    "addr": "value.*.keyName",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2162",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2162:20",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/SharedAccessSignatureAuthorizationRule/properties/keyName"
+  },
+  "/shared_access_policy/0/permissions": {
+    "addr": "value.*.rights",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2174",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2174:19",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/SharedAccessSignatureAuthorizationRule/properties/rights"
+  },
+  "/shared_access_policy/0/primary_key": {
+    "addr": "value.*.primaryKey",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2166",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2166:23",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/SharedAccessSignatureAuthorizationRule/properties/primaryKey"
+  },
+  "/shared_access_policy/0/secondary_key": {
+    "addr": "value.*.secondaryKey",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2170",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2170:25",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/SharedAccessSignatureAuthorizationRule/properties/secondaryKey"
+  },
+  "/sku/0/capacity": {
+    "addr": "sku.capacity",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2495",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2495:21",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/IotHubSkuInfo/properties/capacity"
+  },
+  "/sku/0/name": {
+    "addr": "sku.name",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L2464",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:2464:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/IotHubSkuInfo/properties/name"
+  },
+  "/tags/KEY": {
+    "addr": "tags.*",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3470",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3470:35",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/Resource/properties/tags/additionalProperties"
+  },
+  "/type": {
+    "addr": "type",
+    "link_github": "https://github.com/Azure/azure-rest-api-specs/blob/4c231736c4edc01bbefd837ab6f561b223d56da8/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#L3459",
+    "link_local": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json:3459:17",
+    "ref": "/home/magodo/github/azure-rest-api-specs/specification/iothub/resource-manager/Microsoft.Devices/preview/2022-04-30-preview/iothub.json#/definitions/Resource/properties/type"
   }
-}
+}}

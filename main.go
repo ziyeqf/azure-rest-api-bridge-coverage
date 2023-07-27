@@ -17,7 +17,8 @@ func main() {
 	schemaFile := flag.String("schema", "", "the schema dump of azurerm provider")
 	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
 	ignoreUncoveredResources := flag.Bool("ignore-uncovered-resources", false, "ignore uncovered resources")
-
+	diagnosticsOutput := flag.Bool("diagnostics-output", false, "output diagnostics information")
+	expertOutput := flag.Bool("expert-output", false, "output expert information")
 	flag.Parse()
 
 	coverageMap, err := jsonhelper.ParseCoverageFile(*coverageFile)
@@ -50,18 +51,31 @@ func main() {
 		exitOnError(err)
 	}
 
-	output := make(map[string]map[string][]string)
-	for k, v := range detail {
-		output[k] = make(map[string][]string)
-		output[k]["covered_properties"] = make([]string, 0)
-		output[k]["uncovered_properties"] = make([]string, 0)
-		for name, exist := range v {
-			if exist {
-				output[k]["covered_properties"] = append(output[k]["covered_properties"], name)
-			} else {
-				output[k]["uncovered_properties"] = append(output[k]["uncovered_properties"], name)
+	var output interface{}
+	if *expertOutput {
+		o := make(map[string]jsonhelper.ResourceOutput)
+		for k, v := range detail {
+			o[k], err = jsonhelper.GenResourceOutput(v)
+			if err != nil {
+				exitOnError(err)
 			}
 		}
+		output = o
+	} else {
+		o := make(map[string]map[string][]string)
+		for k, v := range detail {
+			o[k] = make(map[string][]string)
+			o[k]["covered_properties"] = make([]string, 0)
+			o[k]["uncovered_properties"] = make([]string, 0)
+			for name, exist := range v {
+				if exist {
+					o[k]["covered_properties"] = append(o[k]["covered_properties"], name)
+				} else {
+					o[k]["uncovered_properties"] = append(o[k]["uncovered_properties"], name)
+				}
+			}
+		}
+		output = o
 	}
 
 	b, err := json.MarshalIndent(output, "", "  ")
@@ -69,6 +83,18 @@ func main() {
 		exitOnError(err)
 	}
 	fmt.Println(string(b))
+
+	if *diagnosticsOutput {
+		diagOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
+	}
+}
+
+func exitOnError(err error) {
+	log.Println(err.Error())
+	os.Exit(1)
+}
+
+func diagOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string]interface{}) {
 	fmt.Println("----------------------------------------")
 
 	totalScm := 0
@@ -109,9 +135,4 @@ func main() {
 	fmt.Println(fmt.Sprintf("total resources: %d", len(scmCnt)))
 	fmt.Println(fmt.Sprintf("total count schema: %d, coverage: %d, percent: %.2f%%", totalScm, totalCov, float64(totalCov)/float64(totalScm)*100))
 	fmt.Println("----------------------------------------")
-}
-
-func exitOnError(err error) {
-	log.Println(err.Error())
-	os.Exit(1)
 }

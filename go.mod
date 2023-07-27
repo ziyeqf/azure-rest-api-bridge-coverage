@@ -2,7 +2,10 @@ module terraform-azurerm-provider-coverage
 
 go 1.20
 
-require github.com/go-openapi/jsonpointer v0.19.6
+require (
+	github.com/go-openapi/jsonpointer v0.19.6
+	github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12
+)
 
 require (
 	github.com/go-openapi/swag v0.22.3 // indirect
