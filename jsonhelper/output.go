@@ -7,6 +7,7 @@ import (
 )
 
 type ResourceOutput struct {
+	Name            string     `json:"name"`
 	TotalCnt        int        `json:"total_cnt"`
 	CoveredCnt      int        `json:"covered_cnt"`
 	UncoveredCnt    int        `json:"uncovered_cnt"`
@@ -41,8 +42,9 @@ func (root SchemaNode) fillFields(tks []string) SchemaNode {
 	return root
 }
 
-func GenResourceOutput(fieldsCoverageMap map[string]bool) (ResourceOutput, error) {
+func GenResourceOutput(name string, fieldsCoverageMap map[string]bool) (ResourceOutput, error) {
 	output := ResourceOutput{
+		Name:            name,
 		CoveredFields:   SchemaNode{},
 		UncoveredFields: SchemaNode{},
 	}
@@ -52,7 +54,15 @@ func GenResourceOutput(fieldsCoverageMap map[string]bool) (ResourceOutput, error
 		if err != nil {
 			return output, err
 		}
-		if len(jptr.DecodedTokens()) == 1 {
+		tks := make([]string, 0)
+		// remove "0" to make it fit the portal
+		for _, tk := range jptr.DecodedTokens() {
+			if tk != "0" {
+				tks = append(tks, tk)
+			}
+		}
+
+		if len(tks) == 1 {
 			output.TotalCnt++
 			tkName := jptr.DecodedTokens()[0]
 			if exist {
