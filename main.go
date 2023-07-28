@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 
 	"terraform-azurerm-provider-coverage/jsonhelper"
@@ -18,7 +19,7 @@ func main() {
 	ignoreSchemas := flag.String("ignore-schema", "", "the schema to ignore of azurerm provider")
 	ignoreUncoveredResources := flag.Bool("ignore-uncovered-resources", false, "ignore uncovered resources")
 	diagnosticsOutput := flag.Bool("diagnostics-output", false, "output diagnostics information")
-	expertOutput := flag.Bool("expert-output", false, "output expert information")
+	portalOutput := flag.Bool("portal-output", false, "output to fit portal format")
 	flag.Parse()
 
 	coverageMap, err := jsonhelper.ParseCoverageFile(*coverageFile)
@@ -52,14 +53,18 @@ func main() {
 	}
 
 	var output interface{}
-	if *expertOutput {
-		o := make(map[string]jsonhelper.ResourceOutput)
+	if *portalOutput {
+		o := make([]jsonhelper.ResourceOutput, 0)
 		for k, v := range detail {
-			o[k], err = jsonhelper.GenResourceOutput(v)
+			rt, err := jsonhelper.GenResourceOutput(k, v)
 			if err != nil {
 				exitOnError(err)
 			}
+			o = append(o, rt)
 		}
+		sort.Slice(o, func(i, j int) bool {
+			return o[i].Name < o[j].Name
+		})
 		output = o
 	} else {
 		o := make(map[string]map[string][]string)
@@ -78,15 +83,15 @@ func main() {
 		output = o
 	}
 
+	if *diagnosticsOutput {
+		diagOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
+	}
+
 	b, err := json.MarshalIndent(output, "", "  ")
 	if err != nil {
 		exitOnError(err)
 	}
 	fmt.Println(string(b))
-
-	if *diagnosticsOutput {
-		diagOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
-	}
 }
 
 func exitOnError(err error) {
@@ -96,7 +101,6 @@ func exitOnError(err error) {
 
 func diagOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string]interface{}) {
 	fmt.Println("----------------------------------------")
-
 	totalScm := 0
 	totalCov := 0
 	// coverage and schema might have difference
