@@ -57,14 +57,12 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]bool) (Resource
 		tks := make([]string, 0)
 		// remove "0" to make it fit the portal
 		for _, tk := range jptr.DecodedTokens() {
-			if tk != "0" {
-				tks = append(tks, tk)
-			}
+			tks = append(tks, tk)
 		}
 
 		if len(tks) == 1 {
 			output.TotalCnt++
-			tkName := jptr.DecodedTokens()[0]
+			tkName := tks[0]
 			if exist {
 				output.CoveredCnt++
 				output.CoveredFields.RootChildren = append(output.CoveredFields.RootChildren, tkName)
@@ -74,13 +72,64 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]bool) (Resource
 			}
 		} else {
 			if exist {
-				output.CoveredFields = output.CoveredFields.fillFields(jptr.DecodedTokens())
+				output.CoveredFields = output.CoveredFields.fillFields(tks)
 			} else {
-				output.UncoveredFields = output.UncoveredFields.fillFields(jptr.DecodedTokens())
+				output.UncoveredFields = output.UncoveredFields.fillFields(tks)
 			}
 		}
 	}
 
 	output.CoveredPercent = fmt.Sprintf("%.2f%%", float32(output.CoveredCnt)/float32(output.TotalCnt)*100)
 	return output, nil
+}
+
+type PortalDiagnosticOutput struct {
+	TotalCoverPercent string                `json:"total_cover_percent"`
+	TotalFields       int                   `json:"total_fields"`
+	TotalCovered      int                   `json:"total_covered"`
+	TotalResources    int                   `json:"total_resources"`
+	IssueResource     []PortalIssueResource `json:"issue_resource"`
+}
+
+type PortalIssueResource struct {
+	Name         string `json:"name"`
+	StaticsCount int    `json:"statics_count"`
+	CoveredCount int    `json:"covered_count"`
+}
+
+func GenPortalDiagnosticOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string]interface{}) PortalDiagnosticOutput {
+	totalScm := 0
+	totalCov := 0
+
+	for _, v := range covCnt {
+		totalCov += v
+	}
+
+	for _, v := range scmCnt {
+		totalScm += v
+	}
+
+	resultCnt := scmCnt
+	if *ignoreUncoveredResources {
+		resultCnt = covCnt
+	}
+
+	issueRes := make([]PortalIssueResource, 0)
+	for k, _ := range resultCnt {
+		if covCnt[k] != len(coverageMap[k]) {
+			issueRes = append(issueRes, PortalIssueResource{
+				Name:         k,
+				StaticsCount: covCnt[k],
+				CoveredCount: len(coverageMap[k]),
+			})
+		}
+	}
+
+	return PortalDiagnosticOutput{
+		IssueResource:     issueRes,
+		TotalResources:    len(scmCnt),
+		TotalCovered:      totalCov,
+		TotalFields:       totalScm,
+		TotalCoverPercent: fmt.Sprintf("%.2f%%", float32(totalCov)/float32(totalScm)*100),
+	}
 }

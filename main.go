@@ -53,20 +53,7 @@ func main() {
 	}
 
 	var output interface{}
-	if *portalOutput {
-		o := make([]jsonhelper.ResourceOutput, 0)
-		for k, v := range detail {
-			rt, err := jsonhelper.GenResourceOutput(k, v)
-			if err != nil {
-				exitOnError(err)
-			}
-			o = append(o, rt)
-		}
-		sort.Slice(o, func(i, j int) bool {
-			return o[i].Name < o[j].Name
-		})
-		output = o
-	} else {
+	if !*portalOutput {
 		o := make(map[string]map[string][]string)
 		for k, v := range detail {
 			o[k] = make(map[string][]string)
@@ -81,10 +68,29 @@ func main() {
 			}
 		}
 		output = o
-	}
+		if *diagnosticsOutput {
+			diagOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
+		}
+	} else {
+		resources := make([]jsonhelper.ResourceOutput, 0)
+		for k, v := range detail {
+			rt, err := jsonhelper.GenResourceOutput(k, v)
+			if err != nil {
+				exitOnError(err)
+			}
+			resources = append(resources, rt)
+		}
+		sort.Slice(resources, func(i, j int) bool {
+			return resources[i].Name < resources[j].Name
+		})
 
-	if *diagnosticsOutput {
-		diagOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
+		output = map[string]interface{}{
+			"resources": resources,
+		}
+
+		if *diagnosticsOutput {
+			output.(map[string]interface{})["diagnostics"] = jsonhelper.GenPortalDiagnosticOutput(covCnt, scmCnt, ignoreUncoveredResources, coverageMap)
+		}
 	}
 
 	b, err := json.MarshalIndent(output, "", "  ")
@@ -92,6 +98,7 @@ func main() {
 		exitOnError(err)
 	}
 	fmt.Println(string(b))
+
 }
 
 func exitOnError(err error) {
