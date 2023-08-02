@@ -12,19 +12,19 @@ import (
 
 type Opts struct {
 	Resources                map[string]jsonhelper.ResourceJSON
-	CoverageMap              map[string]map[string]interface{}
+	CoverageMap              map[string]map[string][]jsonhelper.PropertyCoverage
 	IgnoreSchemas            []string
 	IgnoreUncoveredResources bool
 }
 
 type Runner struct {
 	resources                map[string]jsonhelper.ResourceJSON
-	coverageMap              map[string]map[string]interface{}
+	coverageMap              map[string]map[string][]jsonhelper.PropertyCoverage
 	ignoreSchemas            []string
 	ignoreUncoveredResources bool
 	parsedCoverageTree       map[string]*jsontree.Node
-	// map[resourceType]map[property]exist
-	coverageResult map[string]map[string]bool
+	// map[resourceType]map[property]coverage_detail
+	coverageResult map[string]map[string]*jsonhelper.PropertyCoverage
 	scmCnt         map[string]int
 	covCnt         map[string]int
 }
@@ -41,7 +41,7 @@ func NwRunner(opt Opts) (*Runner, error) {
 	for n, res := range opt.CoverageMap {
 		rootNode := jsontree.NewNode("/")
 		parsedCoverageTree[n] = &rootNode
-		for prop, _ := range res {
+		for prop := range res {
 			ptr, err := jsonpointer.New(prop)
 			if err != nil {
 				return nil, err
@@ -58,20 +58,22 @@ func NwRunner(opt Opts) (*Runner, error) {
 		coverageMap:              opt.CoverageMap,
 		ignoreSchemas:            opt.IgnoreSchemas,
 		ignoreUncoveredResources: opt.IgnoreUncoveredResources,
-		coverageResult:           make(map[string]map[string]bool),
+		coverageResult:           make(map[string]map[string]*jsonhelper.PropertyCoverage),
 		scmCnt:                   make(map[string]int),
 		covCnt:                   make(map[string]int),
 		parsedCoverageTree:       parsedCoverageTree,
 	}, nil
 }
 
-func (r Runner) Run() (details map[string]map[string]bool, schemaCnt map[string]int, coverageCnt map[string]int, err error) {
+// details map[resourceType]map[Property]coverageDetail
+// for non-exist property, reference is nil
+func (r Runner) Run() (details map[string]map[string]*jsonhelper.PropertyCoverage, schemaCnt map[string]int, coverageCnt map[string]int, err error) {
 	for resType, res := range r.resources {
 		resourceMissed := false
-		if coverage, ok := r.coverageMap[resType]; !ok {
+		if resource, ok := r.coverageMap[resType]; !ok {
 			resourceMissed = true
 		} else {
-			resourceMissed = len(coverage) == 0
+			resourceMissed = len(resource) == 0
 		}
 
 		if r.ignoreUncoveredResources && resourceMissed {
@@ -182,11 +184,11 @@ func (r Runner) UpdateCoverageResult(resType string) func(ptrStr string, realPtr
 		}
 
 		if _, ok := r.coverageResult[resType]; !ok {
-			r.coverageResult[resType] = make(map[string]bool)
+			r.coverageResult[resType] = make(map[string]*jsonhelper.PropertyCoverage)
 		}
 
-		_, ok := r.coverageMap[resType][ptrStr]
-		r.UpdatePropExist(resType, displayPtrStr, ok)
+		detail, ok := r.coverageMap[resType][ptrStr]
+		r.UpdatePropExist(resType, displayPtrStr, ok, detail)
 
 		return nil
 	}
@@ -194,14 +196,16 @@ func (r Runner) UpdateCoverageResult(resType string) func(ptrStr string, realPtr
 }
 
 // never use `false` to override `true` on the result map.
-func (r Runner) UpdatePropExist(resType string, propPtr string, exist bool) {
-	if e, ok := r.coverageResult[resType][propPtr]; ok && e {
+func (r Runner) UpdatePropExist(resType string, propPtr string, exist bool, detail []jsonhelper.PropertyCoverage) {
+	if e, ok := r.coverageResult[resType][propPtr]; ok && e != nil {
 		return
 	}
 
-	r.coverageResult[resType][propPtr] = exist
 	if exist {
+		r.coverageResult[resType][propPtr] = &detail[0]
 		r.covCnt[resType]++
+	} else {
+		r.coverageResult[resType][propPtr] = nil
 	}
 	r.scmCnt[resType]++
 }
@@ -228,7 +232,7 @@ func (r Runner) GetAllChildrenNames(resType, ptrStr string) ([]string, error) {
 	}
 
 	result := make([]string, 0)
-	for k, _ := range cur.Children {
+	for k := range cur.Children {
 		result = append(result, k)
 	}
 

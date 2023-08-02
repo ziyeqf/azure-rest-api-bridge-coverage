@@ -55,12 +55,12 @@ func main() {
 	var output interface{}
 	if !*portalOutput {
 		o := make(map[string]map[string][]string)
-		for k, v := range detail {
+		for k, resource := range detail {
 			o[k] = make(map[string][]string)
 			o[k]["covered_properties"] = make([]string, 0)
 			o[k]["uncovered_properties"] = make([]string, 0)
-			for name, exist := range v {
-				if exist {
+			for name, prop := range resource {
+				if prop != nil {
 					o[k]["covered_properties"] = append(o[k]["covered_properties"], name)
 				} else {
 					o[k]["uncovered_properties"] = append(o[k]["uncovered_properties"], name)
@@ -106,7 +106,7 @@ func exitOnError(err error) {
 	os.Exit(1)
 }
 
-func diagOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string]interface{}) {
+func diagOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string][]jsonhelper.PropertyCoverage) {
 	fmt.Println("----------------------------------------")
 	totalScm := 0
 	totalCov := 0
@@ -127,7 +127,7 @@ func diagOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, c
 
 	issueRes := make([]string, 0)
 	fmt.Println("resource coverage detail:")
-	for k, _ := range resultCnt {
+	for k := range resultCnt {
 		percent := float64(covCnt[k]) / float64(scmCnt[k]) * 100
 		if covCnt[k] != len(coverageMap[k]) {
 			issueRes = append(issueRes, fmt.Sprintf("%s: statics count: %d, coverage count: %d", k, covCnt[k], len(coverageMap[k])))

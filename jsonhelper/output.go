@@ -17,16 +17,28 @@ type ResourceOutput struct {
 }
 
 type SchemaNode struct {
-	RootChildren []string              `json:"root_children,omitempty"`
-	Children     map[string]SchemaNode `json:"children,omitempty"`
+	RootChildren map[string]FieldOutput `json:"root_children,omitempty"`
+	Children     map[string]SchemaNode  `json:"children,omitempty"`
 }
 
-func (root SchemaNode) fillFields(tks []string) SchemaNode {
+type FieldOutput struct {
+	GithubUrl string `json:"github_url"`
+}
+
+func (root SchemaNode) fillFields(tks []string, detail *PropertyCoverage) SchemaNode {
 	if len(tks) == 1 {
 		if root.RootChildren == nil {
-			root.RootChildren = make([]string, 0)
+			root.RootChildren = make(map[string]FieldOutput, 0)
 		}
-		root.RootChildren = append(root.RootChildren, tks[0])
+		if detail != nil {
+			root.RootChildren[tks[0]] = FieldOutput{
+				GithubUrl: detail.LinkGithub,
+			}
+		} else {
+			root.RootChildren[tks[0]] = FieldOutput{}
+		}
+
+		//root.RootChildren = append(root.RootChildren, tks[0])
 		return root
 	}
 
@@ -38,43 +50,51 @@ func (root SchemaNode) fillFields(tks []string) SchemaNode {
 		root.Children[tks[0]] = SchemaNode{}
 	}
 
-	root.Children[tks[0]] = root.Children[tks[0]].fillFields(tks[1:])
+	root.Children[tks[0]] = root.Children[tks[0]].fillFields(tks[1:], detail)
 	return root
 }
 
-func GenResourceOutput(name string, fieldsCoverageMap map[string]bool) (ResourceOutput, error) {
+func GenResourceOutput(name string, fieldsCoverageMap map[string]*PropertyCoverage) (ResourceOutput, error) {
 	output := ResourceOutput{
-		Name:            name,
-		CoveredFields:   SchemaNode{},
-		UncoveredFields: SchemaNode{},
+		Name: name,
+		CoveredFields: SchemaNode{
+			RootChildren: make(map[string]FieldOutput, 0),
+		},
+		UncoveredFields: SchemaNode{
+			RootChildren: make(map[string]FieldOutput, 0),
+		},
 	}
 
-	for name, exist := range fieldsCoverageMap {
+	for name, detail := range fieldsCoverageMap {
 		jptr, err := jsonpointer.New(name)
 		if err != nil {
 			return output, err
 		}
 		tks := make([]string, 0)
-		// remove "0" to make it fit the portal
+		// TODO: remove "0" to make it fit the portal
 		for _, tk := range jptr.DecodedTokens() {
 			tks = append(tks, tk)
 		}
 
 		if len(tks) == 1 {
 			output.TotalCnt++
-			tkName := tks[0]
-			if exist {
+			//tkName := tks[0]
+			if detail != nil {
 				output.CoveredCnt++
-				output.CoveredFields.RootChildren = append(output.CoveredFields.RootChildren, tkName)
+				output.CoveredFields.RootChildren[tks[0]] = FieldOutput{
+					GithubUrl: detail.LinkGithub,
+				}
+				//output.CoveredFields.RootChildren = append(output.CoveredFields.RootChildren, FieldOutput{GithubUrl: detail})
 			} else {
 				output.UncoveredCnt++
-				output.UncoveredFields.RootChildren = append(output.UncoveredFields.RootChildren, tkName)
+				output.UncoveredFields.RootChildren[tks[0]] = FieldOutput{}
+				//output.UncoveredFields.RootChildren = append(output.UncoveredFields.RootChildren, tkName)
 			}
 		} else {
-			if exist {
-				output.CoveredFields = output.CoveredFields.fillFields(tks)
+			if detail != nil {
+				output.CoveredFields = output.CoveredFields.fillFields(tks, detail)
 			} else {
-				output.UncoveredFields = output.UncoveredFields.fillFields(tks)
+				output.UncoveredFields = output.UncoveredFields.fillFields(tks, detail)
 			}
 		}
 	}
@@ -97,7 +117,7 @@ type PortalIssueResource struct {
 	CoveredCount int    `json:"covered_count"`
 }
 
-func GenPortalDiagnosticOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string]interface{}) PortalDiagnosticOutput {
+func GenPortalDiagnosticOutput(covCnt, scmCnt map[string]int, ignoreUncoveredResources *bool, coverageMap map[string]map[string][]PropertyCoverage) PortalDiagnosticOutput {
 	totalScm := 0
 	totalCov := 0
 
@@ -115,7 +135,7 @@ func GenPortalDiagnosticOutput(covCnt, scmCnt map[string]int, ignoreUncoveredRes
 	}
 
 	issueRes := make([]PortalIssueResource, 0)
-	for k, _ := range resultCnt {
+	for k := range resultCnt {
 		if covCnt[k] != len(coverageMap[k]) {
 			issueRes = append(issueRes, PortalIssueResource{
 				Name:         k,
