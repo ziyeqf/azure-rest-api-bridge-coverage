@@ -66,6 +66,7 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]*PropertyCovera
 	}
 
 	for name, detail := range fieldsCoverageMap {
+		output.TotalCnt++
 		jptr, err := jsonpointer.New(name)
 		if err != nil {
 			return output, err
@@ -77,7 +78,6 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]*PropertyCovera
 		}
 
 		if len(tks) == 1 {
-			output.TotalCnt++
 			//tkName := tks[0]
 			if detail != nil {
 				output.CoveredCnt++
@@ -92,8 +92,10 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]*PropertyCovera
 			}
 		} else {
 			if detail != nil {
+				output.CoveredCnt++
 				output.CoveredFields = output.CoveredFields.fillFields(tks, detail)
 			} else {
+				output.UncoveredCnt++
 				output.UncoveredFields = output.UncoveredFields.fillFields(tks, detail)
 			}
 		}
