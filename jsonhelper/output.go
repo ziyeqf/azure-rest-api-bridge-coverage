@@ -72,9 +72,10 @@ func GenResourceOutput(name string, fieldsCoverageMap map[string]*PropertyCovera
 			return output, err
 		}
 		tks := make([]string, 0)
-		// TODO: remove "0" to make it fit the portal
 		for _, tk := range jptr.DecodedTokens() {
-			tks = append(tks, tk)
+			if tk != "0" {
+				tks = append(tks, tk)
+			}
 		}
 
 		if len(tks) == 1 {
