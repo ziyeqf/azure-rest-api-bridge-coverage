@@ -9,8 +9,8 @@ import (
 	"sort"
 	"strings"
 
-	"terraform-azurerm-provider-coverage/jsonhelper"
-	"terraform-azurerm-provider-coverage/runner"
+	"github.com/ziyeqf/terraform-azurerm-provider-coverage/jsonhelper"
+	"github.com/ziyeqf/terraform-azurerm-provider-coverage/runner"
 )
 
 func main() {

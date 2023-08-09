@@ -6,8 +6,8 @@ import (
 	"sort"
 
 	"github.com/go-openapi/jsonpointer"
-	"terraform-azurerm-provider-coverage/jsonhelper"
-	"terraform-azurerm-provider-coverage/jsontree"
+	"github.com/ziyeqf/terraform-azurerm-provider-coverage/jsonhelper"
+	"github.com/ziyeqf/terraform-azurerm-provider-coverage/jsontree"
 )
 
 type Opts struct {

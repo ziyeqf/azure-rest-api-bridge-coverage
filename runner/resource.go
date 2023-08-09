@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/go-openapi/jsonpointer"
-	"terraform-azurerm-provider-coverage/jsonhelper"
+	"github.com/ziyeqf/terraform-azurerm-provider-coverage/jsonhelper"
 )
 
 type ResourceContext struct {
